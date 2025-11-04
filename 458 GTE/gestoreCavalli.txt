@@ -1,0 +1,79 @@
+public class gestoreCavalli {
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+
+
+        System.out.print("Inserisci la lunghezza del percorso (in metri): ");
+
+        int lunghezza = input.nextInt();
+
+
+
+        // Creiamo 5 cavalli con nomi fissati
+
+        Cavallo[] cavalli = {
+
+            new Cavallo("Fulmine"),
+
+            new Cavallo("Tempesta"),
+
+            new Cavallo("Saetta"),
+
+            new Cavallo("Ombra"),
+
+            new Cavallo("Lampo")
+
+        };
+
+
+
+        boolean garaFinita = false;
+
+        Cavallo vincitore = null;
+
+
+
+        // Ciclo di gara
+
+        while (!garaFinita) {
+
+            for (Cavallo c : cavalli) {
+
+                c.avanza();
+
+                System.out.println(c.getNome() + " è a " + c.getPosizione() + " metri.");
+
+
+
+                // Controlla se ha finito
+
+                if (c.haFinito(lunghezza)) {
+
+                    garaFinita = true;
+
+                    vincitore = c;
+
+                    break;
+
+                }
+
+            }
+
+
+
+            System.out.println("------------------------------");
+
+        }
+
+
+
+        System.out.println("🏆 Il vincitore è " + vincitore.getNome() + "!");
+
+        input.close();
+
+    }
+
+}
