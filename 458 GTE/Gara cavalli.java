@@ -1,11 +1,19 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
+
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        // Disattiva bold font di Metal (opzionale)
+        UIManager.put("swing.boldMetal", Boolean.FALSE);
 
         Scanner input = new Scanner(System.in);
 
@@ -25,10 +33,25 @@ public class Main {
             cavalli.add(new Cavallo(nome));
         }
 
+        // --- APERTURA FILECHOOSER PER SCEGLIERE DOVE SALVARE IL FILE ---
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Scegli dove salvare il risultato della gara");
+
+        int scelta = chooser.showSaveDialog(null);
+
+        if (scelta != JFileChooser.APPROVE_OPTION) {
+            System.out.println("Salvataggio annullato dall'utente.");
+            return; // esce dal programma
+        }
+
+        File fileScelto = chooser.getSelectedFile();
+        System.out.println("File selezionato: " + fileScelto.getAbsolutePath());
+        // ---------------------------------------------------------------
+
         boolean garaFinita = false;
         Cavallo vincitore = null;
 
-        try (FileWriter writer = new FileWriter("risultato_gara.txt")) {
+        try (FileWriter writer = new FileWriter(fileScelto)) {
 
             writer.write("=== GARA DEI CAVALLI ===\n");
             writer.write("Lunghezza del percorso: " + lunghezza + " metri\n\n");
@@ -41,7 +64,7 @@ public class Main {
 
                     String stato = c.getNome() + " è a " + c.getPosizione() + " metri.";
                     if (c.isAzzoppato()) {
-                        stato += "Si è azzoppato!";
+                        stato += " Si è azzoppato!";
                     }
 
                     System.out.println(stato);
@@ -61,7 +84,7 @@ public class Main {
             writer.write("\nIl vincitore è " + vincitore.getNome() + "!\n");
             System.out.println("Il vincitore è " + vincitore.getNome() + "!");
 
-            System.out.println("\nRisultato salvato nel file 'risultato_gara.txt'");
+            System.out.println("\nRisultato salvato nel file:\n" + fileScelto.getAbsolutePath());
 
         } catch (IOException e) {
             System.out.println("Errore durante la scrittura del file: " + e.getMessage());
